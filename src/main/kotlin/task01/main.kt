@@ -107,9 +107,7 @@ class Polygon(pointsUnshifted: Array<Point>) {
 
         val isPointByTheRightSideOfSegment: Boolean = segment.crossProductSign(p) * (segment.p2.y - segment.p1.y) < 0
 
-        return segment.includeY(p.y)
-                && segment.minX <= p.x
-                && isPointByTheRightSideOfSegment
+        return segment.includeY(p.y) && isPointByTheRightSideOfSegment
     }
 }
 
