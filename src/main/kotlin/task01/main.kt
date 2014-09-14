@@ -16,7 +16,7 @@ fun solver(reader: DataReader, writer: PrintWriter) {
     val queriesCount = reader.nextInt()
     repeat(queriesCount) {
         val p = reader.nextPoint()
-        writer.println(if (polygon.isPointInside(p)) 1 else 0)
+        writer.println(if (polygon.isPointInside(p)) "yes" else "no")
     }
 }
 
