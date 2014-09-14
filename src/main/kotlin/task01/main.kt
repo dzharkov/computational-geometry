@@ -35,9 +35,19 @@ data class Vector(val x: Int, val y: Int) {
 
 data class Segment(val p1: Point, val p2: Point) {
     val minX : Int get() = Math.min(p1.x, p2.x)
+    val maxX : Int get() = Math.max(p1.x, p2.x)
     val isParallelToOX : Boolean get() = p1.y == p2.y
 
-    fun includeY(y: Int) = Math.min(p1.y, p2.y) < y && y < Math.max(p1.y, p2.y)
+    fun includeY(y: Int) = Math.min(p1.y, p2.y) <= y && y <= Math.max(p1.y, p2.y)
+
+    /**
+     * returns cross product of vectors: (p2 - p1), (p - p1)
+     */
+    fun crossProductSign(p: Point) : Int = (p2 - p1).crossProduct(p - p1).sign()
+
+    fun containsPoint(p: Point) = includeY(p.y) &&
+            minX <= p.x && p.x <= maxX &&
+            crossProductSign(p) == 0
 }
 
 class Polygon(pointsUnshifted: Array<Point>) {
@@ -68,7 +78,8 @@ class Polygon(pointsUnshifted: Array<Point>) {
         mergedSegments.add(Segment(points.last(), points.first()))
     }
 
-    fun isPointInside(p: Point) = (mergedSegments.indices.count { isSegmentIntersected(p, it) }) % 2 != 0
+    fun isPointInside(p: Point) = mergedSegments.any { s -> s.containsPoint(p) } ||
+            (mergedSegments.indices.count { isSegmentIntersected(p, it) }) % 2 != 0
 
     fun isSegmentIntersected(p: Point, segmentIndex: Int) : Boolean {
         val segment = mergedSegments[segmentIndex]
@@ -94,8 +105,7 @@ class Polygon(pointsUnshifted: Array<Point>) {
             return false
         }
 
-        val isPointByTheRightSideOfSegment: Boolean =
-                (segment.p2 - segment.p1).crossProduct(p - segment.p1) * (segment.p2.y - segment.p1.y).toLong() < 0
+        val isPointByTheRightSideOfSegment: Boolean = segment.crossProductSign(p) * (segment.p2.y - segment.p1.y) < 0
 
         return segment.includeY(p.y)
                 && segment.minX <= p.x
@@ -111,6 +121,11 @@ fun belongToDifferentHorizontalSemiplanes(a: Segment, b: Segment,  y: Int) : Boo
 
 fun <T> MutableList<T>.getCyclic(i: Int) = this[(i + this.size) % this.size]
 fun <T> Array<T>.getCyclic(i: Int) = this[(i + this.size) % this.size]
+fun Long.sign() : Int {
+    if (this > 0L) return 1
+    if (this < 0L) return -1
+    return 0
+}
 
 fun DataReader.nextPoint() : Point {
     val token = this.nextLine()
