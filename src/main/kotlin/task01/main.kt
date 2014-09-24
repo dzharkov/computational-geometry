@@ -20,19 +20,6 @@ fun solver(reader: DataReader, writer: PrintWriter) {
     }
 }
 
-data class Point(val x: Int, val y: Int) : Comparable<Point> {
-    override fun compareTo(other: Point): Int {
-        if (x != other.x) return x.compareTo(other.x)
-        return y.compareTo(other.y)
-    }
-
-    fun minus(other: Point) = Vector(x - other.x, y - other.y)
-}
-
-data class Vector(val x: Int, val y: Int) {
-    fun crossProduct(other: Vector) : Long = x.toLong() * other.y.toLong() - y.toLong() * other.x.toLong()
-}
-
 data class Segment(val p1: Point, val p2: Point) {
     val minX = Math.min(p1.x, p2.x)
     val maxX = Math.max(p1.x, p2.x)
@@ -46,7 +33,7 @@ data class Segment(val p1: Point, val p2: Point) {
     /**
      * returns cross product of vectors: (top - bottom), (p - bottom)
      */
-    fun crossProductSign(p: Point) : Int = (top - bottom).crossProduct(p - bottom).sign()
+    fun crossProductSign(p: Point) : Int = (top - bottom).crossProductSign(p - bottom)
 
     fun containsPoint(p: Point) = includeY(p.y) &&
             minX <= p.x && p.x <= maxX &&
@@ -84,15 +71,3 @@ class Polygon(val points : Array<Point>) {
     }
 }
 
-fun <T> Array<T>.getCyclic(i: Int) = this[(i + this.size) % this.size]
-fun Long.sign() : Int {
-    if (this > 0L) return 1
-    if (this < 0L) return -1
-    return 0
-}
-
-fun DataReader.nextPoint() : Point {
-    val token = this.nextLine()
-    val splitted = token.substring(1, token.length - 1).split("\\s*,\\s*")
-    return Point(splitted[0].toInt(), splitted[1].toInt())
-}

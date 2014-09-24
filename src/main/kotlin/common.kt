@@ -13,6 +13,20 @@ inline fun repeat(n: Int, block: () -> Unit) {
         block()
 }
 
+data class Point(val x: Int, val y: Int) : Comparable<Point> {
+    override fun compareTo(other: Point): Int {
+        if (x != other.x) return x.compareTo(other.x)
+        return y.compareTo(other.y)
+    }
+
+    fun minus(other: Point) = Vector(x - other.x, y - other.y)
+}
+
+data class Vector(val x: Int, val y: Int) {
+    fun crossProduct(other: Vector): Long = x.toLong() * other.y.toLong() - y.toLong() * other.x.toLong()
+    fun crossProductSign(other: Vector): Int = crossProduct(other).sign()
+}
+
 class DataReader(srcReader: Reader) {
     private val reader = BufferedReader(srcReader)
 
@@ -58,4 +72,17 @@ fun solveAllStdin(solver: (DataReader, PrintWriter) -> Unit) {
             PrintWriter(System.out),
             solver
     )
+}
+
+fun <T> Array<T>.getCyclic(i: Int) = this[(i + this.size) % this.size]
+fun Long.sign() : Int {
+    if (this > 0L) return 1
+    if (this < 0L) return -1
+    return 0
+}
+
+fun DataReader.nextPoint() : Point {
+    val token = this.nextLine()
+    val splitted = token.substring(1, token.length - 1).split("\\s*,\\s*")
+    return Point(splitted[0].toInt(), splitted[1].toInt())
 }

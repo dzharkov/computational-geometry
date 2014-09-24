@@ -1,7 +1,7 @@
 package ru.spbau.mit.compgeom.task01
-
 import org.junit.Test as test
 import org.junit.Assert
+import ru.spbau.mit.compgeom.*
 
 class Task01Test {
     test fun funcTest1() {
