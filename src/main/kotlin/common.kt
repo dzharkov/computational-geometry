@@ -20,6 +20,7 @@ data class Point(val x: Int, val y: Int) : Comparable<Point> {
     }
 
     fun minus(other: Point) = Vector(x - other.x, y - other.y)
+    override fun toString() = "($x, $y)"
 }
 
 data class Vector(val x: Int, val y: Int) {
@@ -75,10 +76,19 @@ fun solveAllStdin(solver: (DataReader, PrintWriter) -> Unit) {
 }
 
 fun <T> Array<T>.getCyclic(i: Int) = this[(i + this.size) % this.size]
-fun Long.sign() : Int {
-    if (this > 0L) return 1
-    if (this < 0L) return -1
-    return 0
+fun <T> Array<T>.zipWithCyclicTail() : Stream<Pair<T, T>> =
+        this.stream().zip((1..lastIndex + 1).stream().map { getCyclic(it) })
+
+fun Long.sign() = when {
+    this > 0L -> 1
+    this < 0L -> -1
+    else -> 0
+}
+
+fun Int.sign() = when {
+    this > 0 -> 1
+    this < 0 -> -1
+    else -> 0
 }
 
 fun DataReader.nextPoint() : Point {
