@@ -14,4 +14,6 @@ To run specific solution you should run
   ./run_task.sh <task-id>
 
 ## Examples
-  ./run_task.sh 01
+  ./run_task.sh Task01
+  ./run_task.sh Task02
+  ./run_task.sh Quickhull
