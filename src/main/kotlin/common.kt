@@ -21,11 +21,21 @@ data class Point(val x: Int, val y: Int) : Comparable<Point> {
 
     fun minus(other: Point) = Vector(x - other.x, y - other.y)
     override fun toString() = "($x, $y)"
+
+    fun distance(it: Point): Double = Math.sqrt(Math.pow((it.x - x).toDouble(), 2.0) + Math.pow((it.y - y).toDouble(), 2.0))
 }
 
 data class Vector(val x: Int, val y: Int) {
     fun crossProduct(other: Vector): Long = x.toLong() * other.y.toLong() - y.toLong() * other.x.toLong()
     fun crossProductSign(other: Vector): Int = crossProduct(other).sign()
+}
+
+data class Line(p1: Point, p2: Point) {
+    val a = (p1.y - p2.y).toLong()
+    val b = (p2.x - p1.x).toLong()
+    val c = - (a * p1.x.toLong() + b * p1.y.toLong())
+
+    fun relativeDistance(p: Point): Long = Math.abs(a * p.x.toLong() + b * p.y.toLong() + c)
 }
 
 class DataReader(srcReader: Reader) {
