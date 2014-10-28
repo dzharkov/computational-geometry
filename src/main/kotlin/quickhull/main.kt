@@ -159,6 +159,12 @@ private object menuBar : JMenuBar() {
 }
 
 fun main(args: Array<String>) {
+
+    if (args.size > 0 && args[0] == "console") {
+        consoleApp(args.copyOfRange(1, args.size))
+        return
+    }
+
     val frame = JFrame("Quick Hull")
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
     frame.add(quickHullCanvasHolder)

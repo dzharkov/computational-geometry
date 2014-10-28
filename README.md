@@ -17,3 +17,5 @@ To run specific solution you should run
   ./run_task.sh Task01
   ./run_task.sh Task02
   ./run_task.sh Quickhull
+  ./run_task.sh Quickhull console
+  ./run_task.sh Quickhull console random
