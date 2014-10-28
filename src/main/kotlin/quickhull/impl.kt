@@ -55,7 +55,7 @@ private fun ArrayList<Point>.partitionByVector(p1: Point, p2: Point, first: Int,
     }
 }
 
-private fun<T> ArrayList<T>.partitionInPlaced(first: Int, last: Int, predicate: (T) -> Boolean): Int {
+inline private fun<T> ArrayList<T>.partitionInPlaced(first: Int, last: Int, predicate: (T) -> Boolean): Int {
     var i = first
     var j = last - 1
 
