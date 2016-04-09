@@ -51,7 +51,7 @@ private fun ArrayList<Point>.partitionByVector(p1: Point, p2: Point, first: Int,
     val borderVector = p2 - p1
 
     return partitionInPlaced(first, last) {
-        borderVector.crossProductSign(it - p1)  == -1 || it identityEquals p1
+        borderVector.crossProductSign(it - p1)  == -1 || it === p1
     }
 }
 

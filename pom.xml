@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <kotlin.version>0.9.66</kotlin.version>
+        <kotlin.version>1.0.1</kotlin.version>
         <junit.version>4.10</junit.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,6 +20,11 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
 

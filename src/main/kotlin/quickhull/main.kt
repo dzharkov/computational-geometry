@@ -1,20 +1,11 @@
 package ru.spbau.mit.compgeom.quickhull
 
 import ru.spbau.mit.compgeom.Point
-import java.awt.event.MouseListener
-import java.awt.event.MouseEvent
-import javax.swing.JPanel
-import java.awt.Graphics
 import java.awt.Color
-import javax.swing.JPopupMenu
-import javax.swing.JMenuItem
-import java.awt.event.WindowFocusListener
-import java.awt.event.WindowEvent
-import javax.swing.JMenuBar
-import javax.swing.JMenu
-import javax.swing.JFrame
-import java.util.ArrayList
-import java.awt.event.ActionEvent
+import java.awt.Graphics
+import java.awt.event.*
+import java.util.*
+import javax.swing.*
 
 private object basicMouseListener: MouseListener {
     override fun mouseClicked(e: MouseEvent) {
@@ -30,12 +21,12 @@ private object basicMouseListener: MouseListener {
 }
 
 private object pointMenu : JPopupMenu(""), WindowFocusListener {
-    {
-        setVisible(false)
+    init {
+        isVisible = false
         val removePointItem = JMenuItem("Remove point")
         removePointItem.addActionListener {
             quickHullCanvasHolder.removePoint()
-            setVisible(false)
+            isVisible = false
         }
         add(removePointItem)
     }
@@ -45,7 +36,7 @@ private object pointMenu : JPopupMenu(""), WindowFocusListener {
     }
 
     override fun windowLostFocus(e: WindowEvent?) {
-        setVisible(false)
+        isVisible = false
     }
 }
 
@@ -54,7 +45,7 @@ private object quickHullCanvasHolder: JPanel(), MouseListener by basicMouseListe
     var currentCHLast: Int? = null
     var currentPointMenuLocation: Point? = null
 
-    {
+    init {
         add(pointMenu)
         addMouseListener(this)
     }
@@ -81,28 +72,28 @@ private object quickHullCanvasHolder: JPanel(), MouseListener by basicMouseListe
     }
 
     override fun mouseClicked(e: MouseEvent) {
-        pointMenu.setVisible(false)
-        when (e.getButton()) {
+        pointMenu.isVisible = false
+        when (e.button) {
             MouseEvent.BUTTON1 -> {
-                points.add(convertToCartesian(e.getX(), e.getY()))
+                points.add(convertToCartesian(e.x, e.y))
                 repaint()
             }
             MouseEvent.BUTTON3 -> {
-                pointMenu.setLocation(e.getPoint())
-                currentPointMenuLocation = convertToCartesian(e.getX(), e.getY())
-                pointMenu.setVisible(true)
+                pointMenu.location = e.point
+                currentPointMenuLocation = convertToCartesian(e.x, e.y)
+                pointMenu.isVisible = true
             }
         }
     }
 
-    private fun convertToCartesian(x: Int, y: Int) = Point(x, getHeight() - y)
+    private fun convertToCartesian(x: Int, y: Int) = Point(x, height - y)
 
     val Point.displayX: Int get() = this.x
-    val Point.displayY: Int get() = getHeight() - this.y
+    val Point.displayY: Int get() = height - this.y
 
     override fun paintComponent(g: Graphics) {
-        g.clearRect(0, 0, getWidth(), getHeight())
-        g.setColor(Color.BLACK)
+        g.clearRect(0, 0, width, height)
+        g.color = Color.BLACK
         points.forEach { p ->
             g.drawOval(p.displayX, p.displayY, 1, 1)
         }
@@ -151,7 +142,7 @@ private fun buildMenuUtem(name: String, listener: (ActionEvent) -> Unit): JMenuI
 }
 
 private object menuBar : JMenuBar() {
-    {
+    init {
         add(buildMenuUtem("Build CH") { quickHullCanvasHolder.runQuickHull() })
         add(buildMenuUtem("Clear") { quickHullCanvasHolder.clearAll() })
         add(buildMenuUtem("Dump") { quickHullCanvasHolder.dump() })
@@ -159,18 +150,17 @@ private object menuBar : JMenuBar() {
 }
 
 fun main(args: Array<String>) {
-
     if (args.size > 0 && args[0] == "console") {
         consoleApp(args.copyOfRange(1, args.size))
         return
     }
 
     val frame = JFrame("Quick Hull")
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
     frame.add(quickHullCanvasHolder)
     frame.addWindowFocusListener(pointMenu)
     frame.setSize(1200, 600)
-    frame.setResizable(false)
-    frame.setVisible(true)
-    frame.setJMenuBar(menuBar)
+    frame.isResizable = false
+    frame.isVisible = true
+    frame.jMenuBar = menuBar
 }

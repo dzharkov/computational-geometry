@@ -45,7 +45,7 @@ class Polygon(val points : Array<Point>) {
 
     fun isPointInside(p: Point) : Boolean {
         return segments.count {
-            if (it.containsPoint(p)) return @isPointInside true
+            if (it.containsPoint(p)) return@isPointInside true
             isSegmentIntersectedByRay(it, p)
         } % 2 != 0
     }

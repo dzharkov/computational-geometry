@@ -1,11 +1,7 @@
 package ru.spbau.mit.compgeom.quickhull
-import ru.spbau.mit.compgeom.repeat
-import java.util.Random
-import ru.spbau.mit.compgeom.Point
-import ru.spbau.mit.compgeom.DataReader
+import ru.spbau.mit.compgeom.*
 import java.io.PrintWriter
-import ru.spbau.mit.compgeom.nextPoint
-import ru.spbau.mit.compgeom.solveAll
+import java.util.*
 
 fun consoleApp(args: Array<String>) {
     warmUp()

@@ -1,12 +1,8 @@
 package ru.spbau.mit.compgeom.task02
 
-import java.io.PrintWriter
 import ru.spbau.mit.compgeom.*
-import kotlin.support.AbstractIterator
-import kotlin.properties.Delegates
-import java.util.LinkedList
-import java.util.Stack
-import java.util.ArrayList
+import java.io.PrintWriter
+import java.util.*
 
 fun main(args: Array<String>) {
     solveAllStdin(solver = ::solver)
@@ -26,7 +22,7 @@ fun solver(reader: DataReader, writer: PrintWriter) {
 }
 
 class MonotonePolygon(val points: Array<Point>) {
-    {
+    init {
         assert(points.indices.minBy { points[it] } == 0)
     }
 
@@ -37,7 +33,7 @@ class MonotonePolygon(val points: Array<Point>) {
         fun toTriple() = Triple(a1Index, a2Index, a3Index)
     }
 
-    private val rightIndex: Int by Delegates.lazy {
+    private val rightIndex: Int by lazy {
         points.indices.maxBy { points[it] }!!
     }
 
@@ -102,20 +98,20 @@ class MonotonePolygon(val points: Array<Point>) {
     }
 
     private fun buildTriangle(a: Int, b: Int, c: Int): Triangle {
-        val x = intArray(a, b, c).toSortedList()
+        val x = intArrayOf(a, b, c).toList().sorted()
         return Triangle(x[0], x[1], x[2])
     }
 }
 
 fun checkTriangulationIsCorrect(polygon: MonotonePolygon, triangulation: List<MonotonePolygon.Triangle>): Boolean {
-    var trianglesDoubledArea = triangulation.fold(0L) { x, y -> x + y.doubledArea() }
+    val trianglesDoubledArea = triangulation.fold(0L) { x, y -> x + y.doubledArea() }
     return triangulation.size == polygon.points.size - 2 &&
             polygon.doubledArea() == trianglesDoubledArea
 }
 
 fun <T> ArrayList<T>.push(el: T) = add(el)
-fun <T> ArrayList<T>.top(): T = last!!
+fun <T> ArrayList<T>.top(): T = last()!!
 fun <T> ArrayList<T>.second(): T = get(lastIndex - 1)
-fun <T> ArrayList<T>.pop(): T = remove(lastIndex)
+fun <T> ArrayList<T>.pop(): T = removeAt(lastIndex)
 
 
