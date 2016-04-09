@@ -10,6 +10,34 @@ import java.util.*
 import javax.swing.*
 import java.awt.Point as awtPoint
 
+fun main(args: Array<String>) {
+    if (args.size > 0 && args[0] == "console") {
+        consoleApp(args.copyOfRange(1, args.size))
+        return
+    }
+
+    val frame = JFrame("Quick Hull")
+    val quickHullCanvasHolder = QuickHullCanvas()
+
+    frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+    frame.add(quickHullCanvasHolder)
+    frame.setSize(1200, 600)
+    frame.isResizable = false
+    frame.isVisible = true
+
+    frame.jMenuBar = JMenuBar().apply {
+        add(buildMenuItem("Build CH") { quickHullCanvasHolder.runQuickHull() })
+        add(buildMenuItem("Clear") { quickHullCanvasHolder.clearAll() })
+        add(buildMenuItem("Dump") { quickHullCanvasHolder.dump() })
+    }
+}
+
+private fun buildMenuItem(name: String, listener: (ActionEvent) -> Unit): JMenuItem {
+    val x = JMenuItem(name)
+    x.addActionListener(listener)
+    return x
+}
+
 private class QuickHullCanvas : JPanel(), MouseListener by DoNothingMouseListener {
     private val points: ArrayList<Point> = arrayListOf()
     private var currentCHLast: Int? = null
@@ -128,33 +156,5 @@ private object DoNothingMouseListener : MouseListener {
     }
 
     override fun mouseExited(e: MouseEvent) {
-    }
-}
-
-private fun buildMenuItem(name: String, listener: (ActionEvent) -> Unit): JMenuItem {
-    val x = JMenuItem(name)
-    x.addActionListener(listener)
-    return x
-}
-
-fun main(args: Array<String>) {
-    if (args.size > 0 && args[0] == "console") {
-        consoleApp(args.copyOfRange(1, args.size))
-        return
-    }
-
-    val frame = JFrame("Quick Hull")
-    val quickHullCanvasHolder = QuickHullCanvas()
-
-    frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-    frame.add(quickHullCanvasHolder)
-    frame.setSize(1200, 600)
-    frame.isResizable = false
-    frame.isVisible = true
-
-    frame.jMenuBar = JMenuBar().apply {
-        add(buildMenuItem("Build CH") { quickHullCanvasHolder.runQuickHull() })
-        add(buildMenuItem("Clear") { quickHullCanvasHolder.clearAll() })
-        add(buildMenuItem("Dump") { quickHullCanvasHolder.dump() })
     }
 }
