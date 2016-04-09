@@ -15,7 +15,11 @@ To run specific solution you should run
 
 ## Examples
   ./run_task.sh task01
+
   ./run_task.sh task02
+
   ./run_task.sh quickhull
+
   ./run_task.sh quickhull console
+
   ./run_task.sh quickhull console random
