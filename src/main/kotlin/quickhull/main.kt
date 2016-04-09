@@ -3,9 +3,7 @@ package ru.spbau.mit.compgeom.quickhull
 import ru.spbau.mit.compgeom.Point
 import java.awt.Color
 import java.awt.Graphics
-import java.awt.event.ActionEvent
-import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
+import java.awt.event.*
 import java.util.*
 import javax.swing.*
 import java.awt.Point as awtPoint
@@ -30,6 +28,16 @@ fun main(args: Array<String>) {
         add(buildMenuItem("Clear") { quickHullCanvasHolder.clearAll() })
         add(buildMenuItem("Dump") { quickHullCanvasHolder.dump() })
     }
+
+    frame.addWindowFocusListener(object: WindowFocusListener {
+        override fun windowGainedFocus(e: WindowEvent?) {
+
+        }
+
+        override fun windowLostFocus(e: WindowEvent?) {
+            quickHullCanvasHolder.onFocusLost()
+        }
+    })
 }
 
 private fun buildMenuItem(name: String, listener: (ActionEvent) -> Unit): JMenuItem {
@@ -77,6 +85,10 @@ private class QuickHullCanvas : JPanel(), MouseListener by DoNothingMouseListene
     fun dump() {
         logMsg("Dump")
         logConfiguration()
+    }
+
+    fun onFocusLost() {
+        pointMenu.isVisible = false
     }
 
     override fun mouseClicked(e: MouseEvent) {
